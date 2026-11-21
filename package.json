@@ -1,13 +1,10 @@
 {
   "name": "huddle",
   "version": "1.0.0",
+  "description": "Huddle voice calls",
+  "author": "Huddle",
   "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "server": "node server.js",
-    "build": "electron-builder --win portable"
-  },
-  "build": { "appId": "com.huddle.app", "productName": "Huddle", "files": ["index.html", "main.js"] },
-  "dependencies": { "ws": "^8.18.0" },
+  "scripts": { "start": "electron .", "build": "electron-builder --win portable" },
+  "build": { "appId": "com.huddle.app", "productName": "Huddle", "files": ["index.html", "main.js", "package.json"] },
   "devDependencies": { "electron": "^33.0.0", "electron-builder": "^25.0.0" }
 }
