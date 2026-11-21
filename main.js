@@ -1,8 +1,9 @@
-const { app, BrowserWindow, session } = require('electron');
+const { app, BrowserWindow, session, systemPreferences } = require('electron');
 const path = require('path');
 app.setAppUserModelId('com.huddle.app');
 app.disableHardwareAcceleration();
 app.whenReady().then(() => {
+  if (process.platform === 'darwin') systemPreferences.askForMediaAccess('microphone').catch(() => {});
   session.defaultSession.setPermissionRequestHandler((w, p, cb) => cb(true));
   const win = new BrowserWindow({ width: 1100, height: 760, autoHideMenuBar: true, title: 'Huddle', backgroundColor: '#ffffff', webPreferences: { webSecurity: false } });
   win.loadFile(path.join(__dirname, 'index.html')).catch(e => {
