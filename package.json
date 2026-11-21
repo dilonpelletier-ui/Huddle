@@ -7,18 +7,31 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --win portable",
-    "build:mac": "electron-builder --mac zip --x64 --arm64 --publish never"
+    "build:mac": "electron-builder --mac dir --x64 --arm64 --publish never"
   },
   "build": {
     "appId": "com.huddle.app",
     "productName": "Huddle",
-    "files": ["index.html", "main.js", "package.json"],
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
     "mac": {
-      "target": "zip",
       "identity": null,
       "category": "public.app-category.social-networking",
-      "extendInfo": { "NSMicrophoneUsageDescription": "Huddle needs the microphone for voice calls." }
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Huddle needs the microphone for voice calls."
+      }
     }
   },
-  "devDependencies": { "electron": "^33.0.0", "electron-builder": "^25.0.0" }
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/local-notifications": "^6.1.0"
+  }
 }
