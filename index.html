@@ -2,98 +2,153 @@
 <html lang="en"><head><meta charset="UTF-8"><title>Huddle</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:"Google Sans",Roboto,Arial,sans-serif;color:#1f1f1f;background:#fff;height:100vh;overflow:hidden}
-header{height:64px;display:flex;align-items:center;padding:0 16px;gap:8px}
-.logo{display:flex;align-items:center;gap:10px;font-size:22px;color:#5f6368}
-.sp{flex:1}.ib{width:40px;height:40px;border:0;background:none;border-radius:50%;cursor:pointer;font-size:20px;color:#444}.ib:hover{background:#f1f3f4}
-.up{background:#d3e3fd;color:#0b57d0;border:0;border-radius:20px;padding:11px 24px;font-weight:500;cursor:pointer;font-size:14px}
-.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6a9955,#2f5233);margin:0 8px}
-nav{position:absolute;top:80px;left:0;width:80px;display:flex;flex-direction:column;align-items:center;gap:10px}
-nav div{display:flex;flex-direction:column;align-items:center;font-size:12px;cursor:pointer;gap:4px;color:#1f1f1f}
-nav span{width:56px;height:32px;border-radius:16px;display:grid;place-items:center;font-size:18px}
-nav .on span{background:#c2e7ff}
-main{margin:0 auto;max-width:720px;padding-top:6px;height:calc(100vh - 70px);overflow:auto}
-.sb{background:#f0f4f9;border-radius:28px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
-.sb input{width:100%;border:0;outline:0;background:#fff;border-radius:28px;height:56px;padding:0 20px 0 52px;font-size:15px}
-.sw{position:relative}.sw i{position:absolute;left:18px;top:16px;font-style:normal}
-.list{margin-top:8px}.row{display:flex;align-items:center;gap:14px;padding:10px 16px;border-radius:12px;cursor:pointer}.row:hover{background:#f1f3f4}
-.ph{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:500}
-.row b{display:block;font-weight:500}.row small{color:#5f6368}.row .ib{margin-left:auto;color:#0b57d0}
-.empty{text-align:center;margin-top:90px}.empty h1{font-weight:400;font-size:42px;margin:6px 0}.empty p{font-size:19px;margin:0}
-.btn{background:#0b57d0;color:#fff;border:0;border-radius:20px;padding:11px 22px;cursor:pointer;font-size:14px;margin:6px}.btn.o{background:#fff;color:#0b57d0;border:1px solid #747775}
-.add{margin:16px 0;text-align:center}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;place-items:center;z-index:5}.modal.show{display:grid}
-.box{background:#fff;border-radius:24px;padding:28px;width:340px}.box input{width:100%;padding:12px;margin:8px 0;border:1px solid #747775;border-radius:8px;font-size:15px}
-.box h3{margin:0 0 8px;font-weight:400;font-size:22px}
-#call{position:fixed;inset:0;background:#202124;z-index:4;display:none;flex-direction:column}#call.show{display:flex}
-#grid{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:8px;padding:8px}
-#grid video{width:100%;height:100%;object-fit:cover;background:#3c4043;border-radius:12px}
-#bar{height:84px;display:flex;justify-content:center;align-items:center;gap:12px;color:#fff}
-#bar button{width:52px;height:52px;border-radius:50%;border:0;background:#3c4043;color:#fff;font-size:20px;cursor:pointer}#bar .end{background:#d93025;width:70px;border-radius:26px}
-#st{position:absolute;top:14px;left:20px;color:#fff}
-.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d93025;margin-right:6px}.dot.ok{background:#1e8e3e}
+:root{--bl:#007aff;--gr:#34c759;--rd:#ff3b30;--tx:#1d1d1f;--mu:#6e6e73;--bg:#f5f5f7;--ln:#e5e5ea}
+*{box-sizing:border-box;margin:0}body{font-family:-apple-system,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;color:var(--tx);background:#fff;height:100vh;overflow:hidden}
+button{font-family:inherit;cursor:pointer;border:0}svg{display:block}
+header{height:64px;display:flex;align-items:center;gap:16px;padding:0 24px}
+.logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:600;letter-spacing:-.3px}
+.sp{flex:1}.chip{font-size:13px;color:var(--mu);display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--rd)}.dot.ok{background:var(--gr)}
+.link{background:none;color:var(--bl);font-size:14px}.av{width:32px;height:32px;border-radius:50%;background:#d1d1d6;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600}
+nav{position:absolute;top:84px;left:0;width:88px;display:flex;flex-direction:column;align-items:center;gap:14px}
+nav button{background:none;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--mu)}
+nav i{width:56px;height:32px;border-radius:16px;display:grid;place-items:center}nav .on{color:var(--tx);font-weight:500}nav .on i{background:#e8f1ff;color:var(--bl)}
+main{max-width:640px;margin:0 auto;padding:12px 24px;height:calc(100vh - 64px);overflow:auto}
+.card{background:var(--bg);border-radius:20px;padding:12px}
+.sw{position:relative;color:var(--mu)}.sw svg{position:absolute;left:16px;top:15px}
+.sw input{width:100%;height:50px;border:0;outline:0;border-radius:14px;background:#fff;padding:0 16px 0 48px;font-size:16px;font-family:inherit;box-shadow:0 0 0 1px var(--ln)}
+.sw input:focus{box-shadow:0 0 0 2px var(--bl)}
+.row{display:flex;align-items:center;gap:14px;padding:10px 12px;border-radius:12px;cursor:pointer}.row:hover{background:#fff}
+.ph{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;flex:none}
+.row b{display:block;font-weight:500;font-size:16px}.row small{color:var(--mu);font-size:14px}
+.rb{margin-left:auto;display:flex;gap:6px}.rb button{width:36px;height:36px;border-radius:50%;background:none;color:var(--mu);font-size:20px;display:grid;place-items:center}.rb .c{color:var(--gr)}.rb button:hover{background:#ececf0}
+.empty{text-align:center;padding-top:70px}.empty h1{font-size:34px;font-weight:600;letter-spacing:-.6px;margin:18px 0 8px}.empty p{color:var(--mu);font-size:17px;margin-bottom:24px}
+.btn{background:var(--bl);color:#fff;border-radius:22px;padding:12px 24px;font-size:15px;font-weight:500}.btn.o{background:#e8f1ff;color:var(--bl)}.btn:hover{filter:brightness(.95)}
+.add{text-align:center;margin:20px}
+.pad{display:grid;grid-template-columns:repeat(3,76px);gap:16px;justify-content:center}
+.pad button{width:76px;height:76px;border-radius:50%;background:var(--bg);font-size:28px;color:var(--tx);line-height:1}.pad button small{display:block;font-size:10px;letter-spacing:2px;color:var(--mu);margin-top:2px;height:11px}.pad button:active{background:#d1d1d6}
+.disp{height:56px;text-align:center;font-size:34px;letter-spacing:1px;margin:30px 0 12px;font-weight:300;overflow:hidden}
+.cb{width:76px;height:76px;border-radius:50%;background:var(--gr);color:#fff;display:grid;place-items:center;margin:18px auto 0}
+.del{display:block;margin:10px auto;background:none;color:var(--bl);font-size:15px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;place-items:center;z-index:30}.modal.show{display:grid}
+.box{background:#fff;border-radius:20px;padding:26px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.box h3{font-size:20px;font-weight:600;margin-bottom:12px}
+.box input{width:100%;padding:13px 14px;margin:6px 0;border:1px solid var(--ln);border-radius:12px;font-size:15px;font-family:inherit;outline:0}.box input:focus{border-color:var(--bl)}
+.box .r{text-align:right;margin-top:12px;display:flex;gap:8px;justify-content:flex-end}
+#ban{position:fixed;top:12px;left:50%;transform:translate(-50%,-140%);width:min(560px,94vw);background:rgba(28,28,30,.96);color:#fff;border-radius:22px;padding:14px 16px;display:flex;align-items:center;gap:14px;z-index:50;transition:transform .35s cubic-bezier(.2,.9,.3,1);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+#ban.show{transform:translate(-50%,0)}#ban .t{flex:1;min-width:0}#ban b{display:block;font-size:17px;font-weight:600}#ban small{color:#aeaeb2;font-size:13px}
+#ban button{height:38px;border-radius:19px;padding:0 18px;color:#fff;font-size:14px;font-weight:600}.dec{background:var(--rd)}.acc{background:var(--gr)}
+#call{position:fixed;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;color:#fff;background:linear-gradient(180deg,#3a3f4b,#16181d);padding:7vh 24px 5vh}#call.show{display:flex}
+#cn{font-size:34px;font-weight:500;letter-spacing:-.5px;text-align:center}#cs{margin-top:6px;font-size:18px;color:#c7c7cc;font-variant-numeric:tabular-nums}
+#ca{margin:auto;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:48px;font-weight:300}
+#opts{display:grid;grid-template-columns:repeat(3,84px);gap:26px 30px;margin-bottom:34px}
+.o{display:flex;flex-direction:column;align-items:center;gap:8px;background:none;color:#fff;font-size:13px}
+.o i{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center}.o.on i{background:#fff;color:#16181d}
+#kp{display:none;margin-bottom:24px;text-align:center}#kp .pad button{background:rgba(255,255,255,.16);color:#fff}#kp .pad small{color:#c7c7cc}#kd{height:40px;font-size:28px;margin-bottom:12px;letter-spacing:2px}
+#end{width:76px;height:76px;border-radius:50%;background:var(--rd);color:#fff;display:grid;place-items:center}#end svg{transform:rotate(135deg)}
 </style></head><body>
-<header><div class="logo"><svg width="34" height="28" viewBox="0 0 34 28"><rect x="0" y="3" width="22" height="22" rx="6" fill="#7c4dff"/><circle cx="7" cy="18" r="3" fill="#fff"/><path d="M23 10l10-6v20l-10-6z" fill="#00c4a7"/></svg>Huddle</div><div class="sp"></div>
-<span style="font-size:12px;color:#5f6368"><i class="dot" id="dot"></i><span id="myn"></span></span>
-<button class="ib" title="Help">?</button><button class="ib" title="Settings" onclick="settings()">⚙</button><button class="up">Upgrade</button><button class="ib">⋮⋮</button><div class="av"></div></header>
-<nav><div id="tM" onclick="tab('m')"><span>📅</span>Meetings</div><div id="tC" class="on" onclick="tab('c')"><span>📞</span>Calls</div></nav>
+<header><div class="logo"><svg width="26" height="26" viewBox="0 0 24 24"><rect width="24" height="24" rx="7" fill="#007aff"/><path d="M8.2 8.1c.9 1.8 2 2.9 3.8 3.8l1-1c.2-.2.5-.2.7-.1.6.2 1.2.3 1.8.3.3 0 .5.2.5.5v1.7c0 .3-.2.5-.5.5-4 0-7.3-3.3-7.3-7.3 0-.3.2-.5.5-.5h1.7c.3 0 .5.2.5.5 0 .6.1 1.2.3 1.8.1.2 0 .5-.1.7z" fill="#fff" transform="translate(-.5 .5)"/></svg>Huddle</div>
+<div class="sp"></div><div class="chip"><span class="dot" id="dot"></span><span id="myn" title="Your number. Give it to friends."></span></div><button class="link" onclick="settings()">Settings</button><div class="av">Me</div></header>
+<nav><button id="tC" class="on" onclick="tab('c')"><i id="iC"></i>Contacts</button><button id="tK" onclick="tab('k')"><i id="iK"></i>Keypad</button></nav>
 <main id="main"></main>
 
-<div class="modal" id="mAdd"><div class="box"><h3>Add contact</h3><input id="aN" placeholder="Name"><input id="aP" placeholder="Number e.g. +1 555 123 4567"><div style="text-align:right"><button class="btn o" onclick="hide('mAdd')">Cancel</button><button class="btn" onclick="addC()">Save</button></div></div></div>
-<div class="modal" id="mSet"><div class="box"><h3>Settings</h3><small>Your number: <b id="sn"></b></small><input id="sU" placeholder="Server URL e.g. wss://yourhost"><div style="text-align:right"><button class="btn o" onclick="hide('mSet')">Close</button><button class="btn" onclick="saveS()">Save</button></div></div></div>
-<div class="modal" id="mRing"><div class="box" style="text-align:center"><h3 id="rn">Incoming call</h3><button class="btn" onclick="accept()">Answer</button><button class="btn o" onclick="decline()">Decline</button></div></div>
-<div id="call"><div id="st"></div><div id="grid"></div><div id="bar"><button id="bm" onclick="tg('audio',this)">🎤</button><button id="bc" onclick="tg('video',this)">📷</button><button class="end" onclick="hang()">📞</button></div></div>
+<div id="ban"><div class="ph" id="bav" style="background:#5856d6"></div><div class="t"><b id="bn"></b><small id="bs">Incoming Huddle call</small></div><button class="dec" onclick="decline()">Decline</button><button class="acc" onclick="accept()">Accept</button></div>
+
+<div class="modal" id="mAdd"><div class="box"><h3>New contact</h3><input id="aN" placeholder="Name"><input id="aP" placeholder="Number, e.g. +1 555 123 4567"><div class="r"><button class="btn o" onclick="hide('mAdd')">Cancel</button><button class="btn" onclick="addC()">Save</button></div></div></div>
+<div class="modal" id="mSet"><div class="box"><h3>Settings</h3><p style="color:#6e6e73;font-size:14px;margin-bottom:8px">Your number: <b id="sn" style="color:#1d1d1f"></b></p><p style="color:#6e6e73;font-size:13px;margin:10px 0 4px">Group code: you and your friends all type the same code, then you can call each other.</p><input id="sU" placeholder="Group code, e.g. our-secret-2026"><div class="r"><button class="btn o" onclick="hide('mSet')">Close</button><button class="btn" onclick="saveS()">Save</button></div></div></div>
+
+<div id="call"><div id="cn"></div><div id="cs"></div><div id="ca"></div>
+<div id="kp"><div id="kd"></div><div class="pad" id="kpad"></div><button class="del" style="color:#fff;margin-top:18px" onclick="kpToggle()">Hide keypad</button></div>
+<div id="opts"><button class="o" id="oM" onclick="mute()"><i id="icM"></i>Mute</button><button class="o" onclick="kpToggle()"><i id="icK"></i>Keypad</button><button class="o" id="oH" onclick="hold()"><i id="icH"></i>Hold</button><button class="o" onclick="addFromCall()"><i id="icA"></i>Add contact</button></div>
+<button id="end" onclick="hang()"></button></div>
 
 <script>
 const $=s=>document.querySelector(s),S={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
 const digits=s=>s.replace(/\D/g,''),show=i=>$('#'+i).classList.add('show'),hide=i=>$('#'+i).classList.remove('show');
+function fmt(s){const d=digits(s);if(!d)return '';if(d.length>11)return '+'+d;const c=d.length===11?'+'+d[0]+' ':'',n=d.length===11?d.slice(1):d;let o=n.length>3?'('+n.slice(0,3)+') '+n.slice(3,6):n;if(n.length>6)o+='-'+n.slice(6);return c+o}
+const P={phone:'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
+search:'M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z',
+mic:'M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z',
+pause:'M6 19h4V5H6v14zm8-14v14h4V5h-4z',add:'M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z',
+grid:'M4 4h4v4H4zM10 4h4v4h-4zM16 4h4v4h-4zM4 10h4v4H4zM10 10h4v4h-4zM16 10h4v4h-4zM4 16h4v4H4zM10 16h4v4h-4zM16 16h4v4h-4z'};
+const ic=(p,s=24)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="currentColor"><path d="${p}"/></svg>`;
+$('#iC').innerHTML=ic(P.add);$('#iK').innerHTML=ic(P.grid);$('#icM').innerHTML=ic(P.mic,30);$('#icK').innerHTML=ic(P.grid,28);$('#icH').innerHTML=ic(P.pause,30);$('#icA').innerHTML=ic(P.add,30);$('#end').innerHTML=ic(P.phone,34);
+$('#iC').innerHTML=ic('M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z');
+
 let me=S.get('me',null);if(!me){const r=n=>String(Math.floor(Math.random()*10**n)).padStart(n,'0');me='+1 555 '+r(3)+' '+r(4);S.set('me',me)}
-let contacts=S.get('contacts',[]),url=S.get('ws','ws://localhost:8080'),cur='c',q='',ws,local,peers={},ringFrom,ringRoom,outTo;
+let contacts=S.get('contacts',[]),cur='c',q='',pad='',kdig='',ws,local,peers={},ringFrom,ringRoom,peerNum,inCall=false,timer,held=false,muted=false,tone,actx,notif;
 $('#myn').textContent=me;
-const col=n=>['#e8625f','#4f9de8','#f5b82e','#34a853','#8e63ce'][(n.charCodeAt(0)||0)%5];
-const nameOf=d=>(contacts.find(c=>digits(c.num)===d)||{}).name;
+const COL=['#ff6b6b','#5ac8fa','#ffb340','#34c759','#af52de'],col=n=>COL[(n.charCodeAt(0)||0)%5];
+const nameOf=d=>(contacts.find(c=>digits(c.num).slice(-10)===String(d).slice(-10))||{}).name,label=d=>nameOf(d)||'+'+d,init=d=>(nameOf(d)||'#')[0].toUpperCase();
+let rb,ringTO;
+const DT={1:[697,1209],2:[697,1336],3:[697,1477],4:[770,1209],5:[770,1336],6:[770,1477],7:[852,1209],8:[852,1336],9:[852,1477],'*':[941,1209],0:[941,1336],'#':[941,1477]};
+function tones(f,ms,vol=.08){try{actx=actx||new AudioContext();if(actx.state==='suspended')actx.resume();const g=actx.createGain();g.gain.value=vol;g.connect(actx.destination);f.forEach(x=>{const o=actx.createOscillator();o.frequency.value=x;o.connect(g);o.start();o.stop(actx.currentTime+ms/1000)})}catch{}}
+function ringback(on){clearInterval(rb);if(on){tones([440,480],2000,.05);rb=setInterval(()=>tones([440,480],2000,.05),6000)}}
+const LET={2:'ABC',3:'DEF',4:'GHI',5:'JKL',6:'MNO',7:'PQRS',8:'TUV',9:'WXYZ'};
+const padHTML=fn=>'123456789*0#'.split('').map(k=>`<button onclick="${fn}('${k}')">${k}<small>${LET[k]||''}</small></button>`).join('');
+$('#kpad').innerHTML=padHTML('kpKey');
 
-function conn(){ws=new WebSocket(url);ws.onopen=()=>{$('#dot').classList.add('ok');send({t:'reg',num:digits(me)})};
-ws.onclose=()=>{$('#dot').classList.remove('ok');setTimeout(conn,3000)};ws.onerror=()=>ws.close();
-ws.onmessage=async e=>{const m=JSON.parse(e.data);
- if(m.t==='ring'){ringFrom=m.from;ringRoom=m.room;$('#rn').textContent='Incoming call from '+(nameOf(m.from)||'+'+m.from);show('mRing')}
- else if(m.t==='unavail'){$('#st').textContent='That number is not online';setTimeout(hang,2000)}
- else if(m.t==='declined'){$('#st').textContent='Call declined';setTimeout(hang,1500)}
- else if(m.t==='peers'){$('#st').textContent=m.ids.length?'In call':'Waiting for others…';m.ids.forEach(id=>mk(id,true))}
- else if(m.t==='sig')onSig(m.from,m.d);
- else if(m.t==='left'){peers[m.id]&&peers[m.id].close();delete peers[m.id];const v=$('#v'+m.id);v&&v.remove()}}}
-const send=o=>ws&&ws.readyState===1&&ws.send(JSON.stringify(o));
+/* signaling: free public ntfy.sh relay, no account needed. Audio itself goes directly between devices */
+const R='https://ntfy.sh/';let code=S.get('code',''),es,cid,pc,ringOffer;
+async function topic(n){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('huddle|'+code+'|'+digits(n).slice(-10)));return 'hd'+[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,40)}
+async function post(to,o){try{await fetch(R+await topic(to),{method:'POST',body:JSON.stringify(o)});return true}catch{return false}}
+async function pack(d){const s=new Blob([JSON.stringify(d)]).stream().pipeThrough(new CompressionStream('deflate'));const b=new Uint8Array(await new Response(s).arrayBuffer());let t='';b.forEach(c=>t+=String.fromCharCode(c));return btoa(t)}
+async function unpack(t){const b=Uint8Array.from(atob(t),c=>c.charCodeAt(0));const s=new Blob([b]).stream().pipeThrough(new DecompressionStream('deflate'));return JSON.parse(await new Response(s).text())}
+async function conn(){if(es)es.close();if(!code)return;es=new EventSource(R+await topic(me)+'/sse');
+ es.onopen=()=>{$('#myn').textContent=me;$('#dot').classList.add('ok')};
+ es.onerror=()=>{$('#myn').textContent=me+'  ·  Offline';$('#dot').classList.remove('ok')};
+ es.onmessage=async e=>{let m;try{const j=JSON.parse(e.data);if(j.event!=='message')return;m=JSON.parse(j.message)}catch{return}
+  if(m.t==='call'){if(inCall||m.id===cid)return inCall?post(m.from,{t:'decline',id:m.id}):0;ringFrom=m.from;cid=m.id;ringOffer=m.sdp;ringIn(m.from)}
+  else if(m.id!==cid)return;
+  else if(m.t==='answer'&&pc&&!pc.currentRemoteDescription){clearTimeout(ringTO);ringback(false);$('#cs').textContent='Connecting…';await pc.setRemoteDescription(await unpack(m.sdp))}
+  else if(m.t==='decline')end('Declined');
+  else if(m.t==='end'){if($('#ban').classList.contains('show'))stopRing();else end('Call ended')}}}
 
-async function media(){try{local=await navigator.mediaDevices.getUserMedia({audio:true,video:true})}catch{try{local=await navigator.mediaDevices.getUserMedia({audio:true})}catch{local=new MediaStream()}}
- $('#grid').innerHTML='';const v=tile('me');v.srcObject=local;v.muted=true;show('call')}
-function tile(id){let v=$('#v'+id);if(!v){v=document.createElement('video');v.id='v'+id;v.autoplay=true;v.playsInline=true;$('#grid').appendChild(v)}return v}
-function mk(id,init){const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});peers[id]=pc;
- local.getTracks().forEach(t=>pc.addTrack(t,local));pc.onicecandidate=e=>e.candidate&&send({t:'sig',to:id,d:{c:e.candidate}});
- pc.ontrack=e=>{tile(id).srcObject=e.streams[0];$('#st').textContent='In call'};
- if(init)pc.onnegotiationneeded=async()=>{await pc.setLocalDescription();send({t:'sig',to:id,d:{s:pc.localDescription}})};return pc}
-async function onSig(id,d){const pc=peers[id]||mk(id,false);if(d.s){await pc.setRemoteDescription(d.s);if(d.s.type==='offer'){await pc.setLocalDescription();send({t:'sig',to:id,d:{s:pc.localDescription}})}}else if(d.c)try{await pc.addIceCandidate(d.c)}catch{}}
+/* ringing */
+function ringIn(d){$('#bn').textContent=label(d);$('#bs').textContent='Incoming Huddle call'+(nameOf(d)?'  ·  '+fmt(d):'');$('#bav').textContent=init(d);$('#bav').style.background=col(label(d));$('#ban').classList.add('show');
+ try{notif=new Notification(label(d),{body:'Incoming Huddle call. Open Huddle to accept.',requireInteraction:true,silent:true});notif.onclick=()=>{window.focus()}}catch{}
+ try{actx=actx||new AudioContext();const beep=()=>{[0,.35].forEach(t=>{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=480;g.gain.value=.08;o.connect(g);g.connect(actx.destination);o.start(actx.currentTime+t);o.stop(actx.currentTime+t+.25)})};beep();tone=setInterval(beep,2200)}catch{}}
+function stopRing(){$('#ban').classList.remove('show');clearInterval(tone);try{notif&&notif.close()}catch{}}
+function decline(){stopRing();post(ringFrom,{t:'decline',id:cid})}
+async function accept(){stopRing();if(!await mic())return;open(ringFrom,'Connecting…');pc=mk();await pc.setRemoteDescription(await unpack(ringOffer));const a=await pc.createAnswer();await pc.setLocalDescription(a);await ice(pc);post(ringFrom,{t:'answer',id:cid,sdp:await pack(pc.localDescription)})}
 
-async function dial(num){const d=digits(num);if(!d)return;await media();$('#st').textContent='Calling '+(nameOf(d)||'+'+d)+'…';outTo=d;
- const room=crypto.randomUUID();send({t:'invite',to:d,room});send({t:'join',room})}
-async function meet(code){await media();$('#st').textContent='Meeting: '+code;send({t:'join',room:'meet-'+code})}
-async function accept(){hide('mRing');await media();send({t:'join',room:ringRoom})}
-function decline(){hide('mRing');send({t:'decline',to:ringFrom})}
-function hang(){send({t:'leave'});Object.values(peers).forEach(p=>p.close());peers={};local&&local.getTracks().forEach(t=>t.stop());hide('call')}
-function tg(k,b){local.getTracks().filter(t=>t.kind===k).forEach(t=>{t.enabled=!t.enabled;b.style.opacity=t.enabled?1:.4})}
+/* calls */
+async function mic(){if(inCall)return false;try{local=await navigator.mediaDevices.getUserMedia({audio:true});return true}catch{alert('Huddle needs microphone access to make calls.');return false}}
+function open(d,status){inCall=true;peerNum=d;held=muted=false;$('#oM').classList.remove('on');$('#oH').classList.remove('on');$('#kp').style.display='none';$('#opts').style.display='grid';kdig='';$('#kd').textContent='';
+ $('#cn').textContent=label(d);$('#ca').textContent=init(d);$('#cs').textContent=status;show('call')}
+function mk(){const p=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});local.getTracks().forEach(t=>p.addTrack(t,local));
+ p.ontrack=e=>{let a=$('#ra');if(!a){a=document.createElement('audio');a.id='ra';a.autoplay=true;document.body.appendChild(a)}a.srcObject=e.streams[0]};
+ p.onconnectionstatechange=()=>{const s=p.connectionState;if(s==='connected')startTimer();else if(s==='failed')end('Connection failed');else if(s==='disconnected')setTimeout(()=>{if(pc===p&&p.connectionState==='disconnected')end('Call ended')},4000)};return p}
+const ice=p=>new Promise(r=>{if(p.iceGatheringState==='complete')return r();const f=()=>{if(p.iceGatheringState==='complete'){p.removeEventListener('icegatheringstatechange',f);r()}};p.addEventListener('icegatheringstatechange',f);setTimeout(r,3500)});
+async function dial(num){const d=digits(num);if(!d)return;if(!code)return settings();if(!await mic())return;open(d,'Calling…');ringback(true);ringTO=setTimeout(()=>end('No answer'),45000);
+ cid=crypto.randomUUID();pc=mk();await pc.setLocalDescription(await pc.createOffer());await ice(pc);if(!inCall)return;
+ if(!await post(d,{t:'call',id:cid,from:digits(me),sdp:await pack(pc.localDescription)}))end("Can't reach the network")}
+function startTimer(){ringback(false);clearTimeout(ringTO);if(timer)return;const t0=Date.now();const f=()=>{if(held)return;const s=Math.floor((Date.now()-t0)/1000);$('#cs').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};f();timer=setInterval(f,1000)}
+function end(msg){if(!inCall)return;ringback(false);clearTimeout(ringTO);$('#cs').textContent=msg;clearInterval(timer);timer=null;setTimeout(hang,1100)}
+function hang(){if(!inCall)return;ringback(false);clearTimeout(ringTO);post(peerNum,{t:'end',id:cid});pc&&pc.close();pc=null;const a=$('#ra');a&&a.remove();local&&local.getTracks().forEach(t=>t.stop());clearInterval(timer);timer=null;inCall=false;hide('call')}
 
-function tab(t){cur=t;q='';$('#tC').classList.toggle('on',t==='c');$('#tM').classList.toggle('on',t==='m');render()}
-function addC(){const n=$('#aN').value.trim(),p=$('#aP').value.trim();if(!n||!digits(p))return;contacts.push({name:n,num:p});S.set('contacts',contacts);hide('mAdd');$('#aN').value=$('#aP').value='';render()}
-function settings(){$('#sn').textContent=me;$('#sU').value=url;show('mSet')}
-function saveS(){url=$('#sU').value||url;S.set('ws',url);hide('mSet');ws.onclose=null;ws.close();conn()}
+/* in-call options */
+function mute(){muted=!muted;local.getTracks().forEach(t=>t.enabled=!muted);$('#oM').classList.toggle('on',muted)}
+function hold(){held=!held;local.getTracks().forEach(t=>t.enabled=!held&&!muted);document.querySelectorAll('audio').forEach(a=>a.muted=held);$('#oH').classList.toggle('on',held);if(held)$('#cs').textContent='On hold'}
+function kpToggle(){const on=$('#kp').style.display!=='block';$('#kp').style.display=on?'block':'none';$('#opts').style.display=on?'none':'grid'}
+function kpKey(k){tones(DT[k],120);kdig+=k;$('#kd').textContent=kdig;pc&&pc.getSenders().forEach(s=>s.dtmf&&s.dtmf.insertDTMF(k))}
+function addFromCall(){$('#aP').value='+'+peerNum;$('#aN').value=nameOf(peerNum)||'';show('mAdd')}
+
+/* screens */
+function tab(t){cur=t;q='';$('#tC').classList.toggle('on',t==='c');$('#tK').classList.toggle('on',t==='k');render()}
+function addC(){const n=$('#aN').value.trim(),p=$('#aP').value.trim();if(!n||!digits(p))return;contacts=contacts.filter(c=>digits(c.num)!==digits(p));contacts.push({name:n,num:p});S.set('contacts',contacts);hide('mAdd');$('#aN').value=$('#aP').value='';if(inCall){$('#cn').textContent=n;$('#ca').textContent=n[0].toUpperCase()}render()}
+function rm(i){contacts.splice(i,1);S.set('contacts',contacts);render()}
+function settings(){$('#sn').textContent=me;$('#sU').value=code;show('mSet')}
+function saveS(){const c=$('#sU').value.trim();if(!c)return;code=c;S.set('code',c);hide('mSet');conn()}
+function pk(k){tones(DT[k],120);pad+=k;$('#disp').textContent=fmt(pad)}
+function pdel(){pad=pad.slice(0,-1);$('#disp').textContent=fmt(pad)}
 function render(){const m=$('#main');
- if(cur==='m'){m.innerHTML=`<div class="empty"><h1>Video calls and meetings</h1><p>Start an instant meeting or join with a code</p><br><button class="btn" onclick="meet(Math.random().toString(36).slice(2,8))">New meeting</button><br><input id="code" placeholder="Enter a code" style="padding:12px;border:1px solid #747775;border-radius:8px;width:200px"><button class="btn o" onclick="meet($('#code').value.trim()||'lobby')">Join</button></div>`;return}
- const f=contacts.filter(c=>(c.name+c.num).toLowerCase().includes(q.toLowerCase()));
- let rows=f.map(c=>`<div class="row" onclick="dial('${c.num}')"><div class="ph" style="background:${col(c.name)}">${c.name[0].toUpperCase()}</div><div><b>${c.name}</b><small>${c.num}</small></div><button class="ib">📞</button></div>`).join('');
- if(digits(q).length>3&&!f.length)rows+=`<div class="row" onclick="dial('${q}')"><div class="ph" style="background:#0b57d0">#</div><div><b>Call ${q}</b></div><button class="ib">📞</button></div>`;
- m.innerHTML=`<div class="sb"><div class="sw"><i>🔍</i><input id="q" placeholder="Search contacts or dial" value="${q}" autocomplete="off"></div>${contacts.length?`<div class="list">${rows}</div>`:''}</div>`+
- (contacts.length?`<div class="add"><button class="btn o" onclick="show('mAdd')">+ Add contact</button></div>`:`<div class="empty">
- <svg width="360" height="150" viewBox="0 0 360 150"><circle cx="48" cy="22" r="18" fill="#fff" stroke="#222" stroke-width="1.5"/><circle cx="105" cy="32" r="26" fill="#e8625f" stroke="#222" stroke-width="1.5"/><circle cx="108" cy="95" r="26" fill="#cfe8fb" stroke="#222" stroke-width="1.5"/><rect x="22" y="75" width="44" height="44" rx="8" transform="rotate(45 44 97)" fill="#fbbc04"/><circle cx="195" cy="52" r="46" fill="#fbbc04" stroke="#222" stroke-width="1.5"/><circle cx="190" cy="48" r="26" fill="#f1c9a5" stroke="#222" stroke-width="1.5"/><path d="M165 38q25-30 50 0" fill="#9c3b24"/><path d="M170 70q20 20 40 0" fill="#9c3b24"/><path d="M262 40q40-20 28 20t-40 6z" fill="#34a853"/><rect x="245" y="12" width="52" height="40" rx="8" fill="#fff" stroke="#222" stroke-width="1.5"/><rect x="258" y="22" width="22" height="18" rx="3" fill="#cfe8fb" stroke="#1a73e8"/><rect x="262" y="105" width="52" height="38" rx="19" fill="#e8625f"/><path d="M276 126q12-8 24 0" stroke="#fff" stroke-width="4" fill="none"/></svg>
- <h1>Connect with someone you know</h1><p>Connect, collaborate, and celebrate from anywhere with Huddle</p><br><button class="btn" onclick="show('mAdd')">+ Add contact</button></div>`);
+ if(cur==='k'){m.innerHTML=`<div class="disp" id="disp">${fmt(pad)}</div><div class="pad">${padHTML('pk')}</div><button class="cb" onclick="dial(pad)">${ic(P.phone,32)}</button><button class="del" onclick="pdel()">Delete</button>`;return}
+ const f=contacts.map((c,i)=>({...c,i})).filter(c=>(c.name+c.num).toLowerCase().includes(q.toLowerCase()));
+ let rows=f.map(c=>`<div class="row" onclick="dial('${c.num}')"><div class="ph" style="background:${col(c.name)}">${c.name[0].toUpperCase()}</div><div><b>${c.name}</b><small>${fmt(c.num)}</small></div><div class="rb"><button title="Remove" onclick="event.stopPropagation();rm(${c.i})">&times;</button><button class="c">${ic(P.phone,20)}</button></div></div>`).join('');
+ if(digits(q).length>3&&!f.length)rows+=`<div class="row" onclick="dial('${q}')"><div class="ph" style="background:var(--bl)">#</div><div><b>Call ${q}</b></div><div class="rb"><button class="c">${ic(P.phone,20)}</button></div></div>`;
+ m.innerHTML=`<div class="card"><div class="sw">${ic(P.search,20)}<input id="q" placeholder="Search contacts or dial" value="${q}" autocomplete="off"></div>${contacts.length?`<div style="margin-top:8px">${rows}</div>`:''}</div>`+
+ (contacts.length?`<div class="add"><button class="btn o" onclick="show('mAdd')">Add contact</button></div>`:`<div class="empty"><svg width="240" height="120" viewBox="0 0 240 120"><circle cx="60" cy="60" r="34" fill="#ff6b6b"/><circle cx="120" cy="60" r="44" fill="#ffb340"/><circle cx="182" cy="60" r="34" fill="#5ac8fa"/><path d="M104 46l12 12-4 5c5 9 11 14 20 18l5-4 12 12-5 8c-30 4-62-28-58-58z" fill="#fff" transform="translate(-2 4) scale(.9)"/></svg><h1>Call someone you know</h1><p>Add a contact or type a number to start a voice call.</p><button class="btn" onclick="show('mAdd')">Add contact</button></div>`);
  const i=$('#q');i.focus();i.setSelectionRange(q.length,q.length);i.oninput=()=>{q=i.value;render()};i.onkeydown=e=>{if(e.key==='Enter'&&digits(q).length>3)dial(q)}}
-render();conn();
+try{Notification.requestPermission()}catch{}
+render();conn();if(!code)settings();
 </script></body></html>
