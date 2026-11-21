@@ -27,7 +27,41 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build:mac
+      - name: Sign (ad-hoc) and zip
+        run: |
+          for app in $(find dist -maxdepth 2 -name Huddle.app); do
+            codesign --force --deep --sign - "$app"
+            n=$(basename "$(dirname "$app")")
+            ditto -c -k --keepParent "$app" "dist/Huddle-$n.zip"
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: Huddle-Mac
           path: dist/*.zip
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: npm install
+      - run: mkdir -p www && cp index.html www/
+      - run: npx cap add android
+      - name: Add permissions
+        run: |
+          sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.RECORD_AUDIO" />\n    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.VIBRATE" />#' android/app/src/main/AndroidManifest.xml
+          grep RECORD_AUDIO android/app/src/main/AndroidManifest.xml
+      - run: npx cap sync android
+      - name: Accept SDK licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+      - name: Build APK
+        run: cd android && chmod +x gradlew && ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Huddle-Android
+          path: android/app/build/outputs/apk/debug/app-debug.apk
