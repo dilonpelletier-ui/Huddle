@@ -4,7 +4,21 @@
   "description": "Huddle voice calls",
   "author": "Huddle",
   "main": "main.js",
-  "scripts": { "start": "electron .", "build": "electron-builder --win portable" },
-  "build": { "appId": "com.huddle.app", "productName": "Huddle", "files": ["index.html", "main.js", "package.json"] },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win portable",
+    "build:mac": "electron-builder --mac zip --x64 --arm64 --publish never"
+  },
+  "build": {
+    "appId": "com.huddle.app",
+    "productName": "Huddle",
+    "files": ["index.html", "main.js", "package.json"],
+    "mac": {
+      "target": "zip",
+      "identity": null,
+      "category": "public.app-category.social-networking",
+      "extendInfo": { "NSMicrophoneUsageDescription": "Huddle needs the microphone for voice calls." }
+    }
+  },
   "devDependencies": { "electron": "^33.0.0", "electron-builder": "^25.0.0" }
 }
