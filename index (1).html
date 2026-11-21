@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Huddle</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:"Google Sans",Roboto,Arial,sans-serif;color:#1f1f1f;background:#fff;height:100vh;overflow:hidden}
+header{height:64px;display:flex;align-items:center;padding:0 16px;gap:8px}
+.logo{display:flex;align-items:center;gap:10px;font-size:22px;color:#5f6368}
+.sp{flex:1}.ib{width:40px;height:40px;border:0;background:none;border-radius:50%;cursor:pointer;font-size:20px;color:#444}.ib:hover{background:#f1f3f4}
+.up{background:#d3e3fd;color:#0b57d0;border:0;border-radius:20px;padding:11px 24px;font-weight:500;cursor:pointer;font-size:14px}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6a9955,#2f5233);margin:0 8px}
+nav{position:absolute;top:80px;left:0;width:80px;display:flex;flex-direction:column;align-items:center;gap:10px}
+nav div{display:flex;flex-direction:column;align-items:center;font-size:12px;cursor:pointer;gap:4px;color:#1f1f1f}
+nav span{width:56px;height:32px;border-radius:16px;display:grid;place-items:center;font-size:18px}
+nav .on span{background:#c2e7ff}
+main{margin:0 auto;max-width:720px;padding-top:6px;height:calc(100vh - 70px);overflow:auto}
+.sb{background:#f0f4f9;border-radius:28px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.sb input{width:100%;border:0;outline:0;background:#fff;border-radius:28px;height:56px;padding:0 20px 0 52px;font-size:15px}
+.sw{position:relative}.sw i{position:absolute;left:18px;top:16px;font-style:normal}
+.list{margin-top:8px}.row{display:flex;align-items:center;gap:14px;padding:10px 16px;border-radius:12px;cursor:pointer}.row:hover{background:#f1f3f4}
+.ph{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:500}
+.row b{display:block;font-weight:500}.row small{color:#5f6368}.row .ib{margin-left:auto;color:#0b57d0}
+.empty{text-align:center;margin-top:90px}.empty h1{font-weight:400;font-size:42px;margin:6px 0}.empty p{font-size:19px;margin:0}
+.btn{background:#0b57d0;color:#fff;border:0;border-radius:20px;padding:11px 22px;cursor:pointer;font-size:14px;margin:6px}.btn.o{background:#fff;color:#0b57d0;border:1px solid #747775}
+.add{margin:16px 0;text-align:center}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;place-items:center;z-index:5}.modal.show{display:grid}
+.box{background:#fff;border-radius:24px;padding:28px;width:340px}.box input{width:100%;padding:12px;margin:8px 0;border:1px solid #747775;border-radius:8px;font-size:15px}
+.box h3{margin:0 0 8px;font-weight:400;font-size:22px}
+#call{position:fixed;inset:0;background:#202124;z-index:4;display:none;flex-direction:column}#call.show{display:flex}
+#grid{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:8px;padding:8px}
+#grid video{width:100%;height:100%;object-fit:cover;background:#3c4043;border-radius:12px}
+#bar{height:84px;display:flex;justify-content:center;align-items:center;gap:12px;color:#fff}
+#bar button{width:52px;height:52px;border-radius:50%;border:0;background:#3c4043;color:#fff;font-size:20px;cursor:pointer}#bar .end{background:#d93025;width:70px;border-radius:26px}
+#st{position:absolute;top:14px;left:20px;color:#fff}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d93025;margin-right:6px}.dot.ok{background:#1e8e3e}
+</style></head><body>
+<header><div class="logo"><svg width="34" height="28" viewBox="0 0 34 28"><rect x="0" y="3" width="22" height="22" rx="6" fill="#7c4dff"/><circle cx="7" cy="18" r="3" fill="#fff"/><path d="M23 10l10-6v20l-10-6z" fill="#00c4a7"/></svg>Huddle</div><div class="sp"></div>
+<span style="font-size:12px;color:#5f6368"><i class="dot" id="dot"></i><span id="myn"></span></span>
+<button class="ib" title="Help">?</button><button class="ib" title="Settings" onclick="settings()">⚙</button><button class="up">Upgrade</button><button class="ib">⋮⋮</button><div class="av"></div></header>
+<nav><div id="tM" onclick="tab('m')"><span>📅</span>Meetings</div><div id="tC" class="on" onclick="tab('c')"><span>📞</span>Calls</div></nav>
+<main id="main"></main>
+
+<div class="modal" id="mAdd"><div class="box"><h3>Add contact</h3><input id="aN" placeholder="Name"><input id="aP" placeholder="Number e.g. +1 555 123 4567"><div style="text-align:right"><button class="btn o" onclick="hide('mAdd')">Cancel</button><button class="btn" onclick="addC()">Save</button></div></div></div>
+<div class="modal" id="mSet"><div class="box"><h3>Settings</h3><small>Your number: <b id="sn"></b></small><input id="sU" placeholder="Server URL e.g. wss://yourhost"><div style="text-align:right"><button class="btn o" onclick="hide('mSet')">Close</button><button class="btn" onclick="saveS()">Save</button></div></div></div>
+<div class="modal" id="mRing"><div class="box" style="text-align:center"><h3 id="rn">Incoming call</h3><button class="btn" onclick="accept()">Answer</button><button class="btn o" onclick="decline()">Decline</button></div></div>
+<div id="call"><div id="st"></div><div id="grid"></div><div id="bar"><button id="bm" onclick="tg('audio',this)">🎤</button><button id="bc" onclick="tg('video',this)">📷</button><button class="end" onclick="hang()">📞</button></div></div>
+
+<script>
+const $=s=>document.querySelector(s),S={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+const digits=s=>s.replace(/\D/g,''),show=i=>$('#'+i).classList.add('show'),hide=i=>$('#'+i).classList.remove('show');
+let me=S.get('me',null);if(!me){const r=n=>String(Math.floor(Math.random()*10**n)).padStart(n,'0');me='+1 555 '+r(3)+' '+r(4);S.set('me',me)}
+let contacts=S.get('contacts',[]),url=S.get('ws','ws://localhost:8080'),cur='c',q='',ws,local,peers={},ringFrom,ringRoom,outTo;
+$('#myn').textContent=me;
+const col=n=>['#e8625f','#4f9de8','#f5b82e','#34a853','#8e63ce'][(n.charCodeAt(0)||0)%5];
+const nameOf=d=>(contacts.find(c=>digits(c.num)===d)||{}).name;
+
+function conn(){ws=new WebSocket(url);ws.onopen=()=>{$('#dot').classList.add('ok');send({t:'reg',num:digits(me)})};
+ws.onclose=()=>{$('#dot').classList.remove('ok');setTimeout(conn,3000)};ws.onerror=()=>ws.close();
+ws.onmessage=async e=>{const m=JSON.parse(e.data);
+ if(m.t==='ring'){ringFrom=m.from;ringRoom=m.room;$('#rn').textContent='Incoming call from '+(nameOf(m.from)||'+'+m.from);show('mRing')}
+ else if(m.t==='unavail'){$('#st').textContent='That number is not online';setTimeout(hang,2000)}
+ else if(m.t==='declined'){$('#st').textContent='Call declined';setTimeout(hang,1500)}
+ else if(m.t==='peers'){$('#st').textContent=m.ids.length?'In call':'Waiting for others…';m.ids.forEach(id=>mk(id,true))}
+ else if(m.t==='sig')onSig(m.from,m.d);
+ else if(m.t==='left'){peers[m.id]&&peers[m.id].close();delete peers[m.id];const v=$('#v'+m.id);v&&v.remove()}}}
+const send=o=>ws&&ws.readyState===1&&ws.send(JSON.stringify(o));
+
+async function media(){try{local=await navigator.mediaDevices.getUserMedia({audio:true,video:true})}catch{try{local=await navigator.mediaDevices.getUserMedia({audio:true})}catch{local=new MediaStream()}}
+ $('#grid').innerHTML='';const v=tile('me');v.srcObject=local;v.muted=true;show('call')}
+function tile(id){let v=$('#v'+id);if(!v){v=document.createElement('video');v.id='v'+id;v.autoplay=true;v.playsInline=true;$('#grid').appendChild(v)}return v}
+function mk(id,init){const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});peers[id]=pc;
+ local.getTracks().forEach(t=>pc.addTrack(t,local));pc.onicecandidate=e=>e.candidate&&send({t:'sig',to:id,d:{c:e.candidate}});
+ pc.ontrack=e=>{tile(id).srcObject=e.streams[0];$('#st').textContent='In call'};
+ if(init)pc.onnegotiationneeded=async()=>{await pc.setLocalDescription();send({t:'sig',to:id,d:{s:pc.localDescription}})};return pc}
+async function onSig(id,d){const pc=peers[id]||mk(id,false);if(d.s){await pc.setRemoteDescription(d.s);if(d.s.type==='offer'){await pc.setLocalDescription();send({t:'sig',to:id,d:{s:pc.localDescription}})}}else if(d.c)try{await pc.addIceCandidate(d.c)}catch{}}
+
+async function dial(num){const d=digits(num);if(!d)return;await media();$('#st').textContent='Calling '+(nameOf(d)||'+'+d)+'…';outTo=d;
+ const room=crypto.randomUUID();send({t:'invite',to:d,room});send({t:'join',room})}
+async function meet(code){await media();$('#st').textContent='Meeting: '+code;send({t:'join',room:'meet-'+code})}
+async function accept(){hide('mRing');await media();send({t:'join',room:ringRoom})}
+function decline(){hide('mRing');send({t:'decline',to:ringFrom})}
+function hang(){send({t:'leave'});Object.values(peers).forEach(p=>p.close());peers={};local&&local.getTracks().forEach(t=>t.stop());hide('call')}
+function tg(k,b){local.getTracks().filter(t=>t.kind===k).forEach(t=>{t.enabled=!t.enabled;b.style.opacity=t.enabled?1:.4})}
+
+function tab(t){cur=t;q='';$('#tC').classList.toggle('on',t==='c');$('#tM').classList.toggle('on',t==='m');render()}
+function addC(){const n=$('#aN').value.trim(),p=$('#aP').value.trim();if(!n||!digits(p))return;contacts.push({name:n,num:p});S.set('contacts',contacts);hide('mAdd');$('#aN').value=$('#aP').value='';render()}
+function settings(){$('#sn').textContent=me;$('#sU').value=url;show('mSet')}
+function saveS(){url=$('#sU').value||url;S.set('ws',url);hide('mSet');ws.onclose=null;ws.close();conn()}
+function render(){const m=$('#main');
+ if(cur==='m'){m.innerHTML=`<div class="empty"><h1>Video calls and meetings</h1><p>Start an instant meeting or join with a code</p><br><button class="btn" onclick="meet(Math.random().toString(36).slice(2,8))">New meeting</button><br><input id="code" placeholder="Enter a code" style="padding:12px;border:1px solid #747775;border-radius:8px;width:200px"><button class="btn o" onclick="meet($('#code').value.trim()||'lobby')">Join</button></div>`;return}
+ const f=contacts.filter(c=>(c.name+c.num).toLowerCase().includes(q.toLowerCase()));
+ let rows=f.map(c=>`<div class="row" onclick="dial('${c.num}')"><div class="ph" style="background:${col(c.name)}">${c.name[0].toUpperCase()}</div><div><b>${c.name}</b><small>${c.num}</small></div><button class="ib">📞</button></div>`).join('');
+ if(digits(q).length>3&&!f.length)rows+=`<div class="row" onclick="dial('${q}')"><div class="ph" style="background:#0b57d0">#</div><div><b>Call ${q}</b></div><button class="ib">📞</button></div>`;
+ m.innerHTML=`<div class="sb"><div class="sw"><i>🔍</i><input id="q" placeholder="Search contacts or dial" value="${q}" autocomplete="off"></div>${contacts.length?`<div class="list">${rows}</div>`:''}</div>`+
+ (contacts.length?`<div class="add"><button class="btn o" onclick="show('mAdd')">+ Add contact</button></div>`:`<div class="empty">
+ <svg width="360" height="150" viewBox="0 0 360 150"><circle cx="48" cy="22" r="18" fill="#fff" stroke="#222" stroke-width="1.5"/><circle cx="105" cy="32" r="26" fill="#e8625f" stroke="#222" stroke-width="1.5"/><circle cx="108" cy="95" r="26" fill="#cfe8fb" stroke="#222" stroke-width="1.5"/><rect x="22" y="75" width="44" height="44" rx="8" transform="rotate(45 44 97)" fill="#fbbc04"/><circle cx="195" cy="52" r="46" fill="#fbbc04" stroke="#222" stroke-width="1.5"/><circle cx="190" cy="48" r="26" fill="#f1c9a5" stroke="#222" stroke-width="1.5"/><path d="M165 38q25-30 50 0" fill="#9c3b24"/><path d="M170 70q20 20 40 0" fill="#9c3b24"/><path d="M262 40q40-20 28 20t-40 6z" fill="#34a853"/><rect x="245" y="12" width="52" height="40" rx="8" fill="#fff" stroke="#222" stroke-width="1.5"/><rect x="258" y="22" width="22" height="18" rx="3" fill="#cfe8fb" stroke="#1a73e8"/><rect x="262" y="105" width="52" height="38" rx="19" fill="#e8625f"/><path d="M276 126q12-8 24 0" stroke="#fff" stroke-width="4" fill="none"/></svg>
+ <h1>Connect with someone you know</h1><p>Connect, collaborate, and celebrate from anywhere with Huddle</p><br><button class="btn" onclick="show('mAdd')">+ Add contact</button></div>`);
+ const i=$('#q');i.focus();i.setSelectionRange(q.length,q.length);i.oninput=()=>{q=i.value;render()};i.onkeydown=e=>{if(e.key==='Enter'&&digits(q).length>3)dial(q)}}
+render();conn();
+</script></body></html>
