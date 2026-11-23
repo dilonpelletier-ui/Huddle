@@ -49,19 +49,51 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - run: npm install
-      - run: mkdir -p www && cp index.html www/
-      - run: npx cap add android
-      - name: Add permissions
+      - name: Create Android project
         run: |
-          sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.RECORD_AUDIO" />\n    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.VIBRATE" />#' android/app/src/main/AndroidManifest.xml
-          grep RECORD_AUDIO android/app/src/main/AndroidManifest.xml
-      - run: npx cap sync android
+          mkdir -p build-android/www
+          cp index.html build-android/www/
+          cd build-android
+          echo '{"name":"huddle-android","version":"1.0.0","private":true}' > package.json
+          echo '{"appId":"com.huddle.app","appName":"Huddle","webDir":"www"}' > capacitor.config.json
+          npm install --legacy-peer-deps @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 @capacitor/local-notifications@6
+          npx cap add android
+      - name: Add permissions
+        working-directory: build-android
+        run: |
+          python3 - <<'EOF'
+          p = 'android/app/src/main/AndroidManifest.xml'
+          s = open(p).read()
+          perms = ''.join('    <uses-permission android:name="android.permission.%s" />\n' % n
+                          for n in ('INTERNET', 'RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS', 'POST_NOTIFICATIONS', 'VIBRATE'))
+          s = s.replace('<application', perms + '    <application', 1)
+          open(p, 'w').write(s)
+          assert 'RECORD_AUDIO' in s
+          EOF
+      - name: Sync
+        working-directory: build-android
+        run: npx cap sync android
       - name: Accept SDK licenses
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
       - name: Build APK
-        run: cd android && chmod +x gradlew && ./gradlew assembleDebug
+        working-directory: build-android/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: Huddle-Android
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: build-android/android/app/build/outputs/apk/debug/app-debug.apk
+  chromebook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run build:linux
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Huddle-Chromebook
+          path: dist/*.deb
