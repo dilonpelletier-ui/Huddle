@@ -65,7 +65,7 @@ jobs:
           p = 'android/app/src/main/AndroidManifest.xml'
           s = open(p).read()
           perms = ''.join('    <uses-permission android:name="android.permission.%s" />\n' % n
-                          for n in ('INTERNET', 'RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS', 'POST_NOTIFICATIONS', 'VIBRATE'))
+                          for n in ('RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS', 'POST_NOTIFICATIONS', 'VIBRATE'))
           s = s.replace('<application', perms + '    <application', 1)
           open(p, 'w').write(s)
           assert 'RECORD_AUDIO' in s
