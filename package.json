@@ -2,12 +2,16 @@
   "name": "huddle",
   "version": "1.0.0",
   "description": "Huddle voice calls",
-  "author": "Huddle",
+  "author": {
+    "name": "Huddle",
+    "email": "noreply@example.com"
+  },
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --win portable",
-    "build:mac": "electron-builder --mac dir --x64 --arm64 --publish never"
+    "build:mac": "electron-builder --mac dir --x64 --arm64 --publish never",
+    "build:linux": "electron-builder --linux deb --x64 --arm64 --publish never"
   },
   "build": {
     "appId": "com.huddle.app",
@@ -24,14 +28,16 @@
       "extendInfo": {
         "NSMicrophoneUsageDescription": "Huddle needs the microphone for voice calls."
       }
+    },
+    "linux": {
+      "target": "deb",
+      "category": "Network",
+      "synopsis": "Voice calls and messages"
     }
   },
   "devDependencies": {
     "electron": "^33.0.0",
-    "electron-builder": "^25.0.0",
-    "@capacitor/core": "^6.2.0",
-    "@capacitor/cli": "^6.2.0",
-    "@capacitor/android": "^6.2.0",
-    "@capacitor/local-notifications": "^6.1.0"
-  }
+    "electron-builder": "^25.0.0"
+  },
+  "homepage": "https://github.com/"
 }
